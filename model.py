@@ -7,10 +7,10 @@ import torch.distributed as dist
 from collections import OrderedDict
 from ptflops import get_model_complexity_info
 
-from utils.color import HVIT, PHVIT
-from utils.norms import LayerNormFunction, LayerNorm2d
-from utils.layer import CustomSequential, SimpleGate, Adapter, FreMLP, Branch
-from utils.attn import CAB
+from arch.color import HVIT, PHVIT
+from arch.norms import LayerNormFunction, LayerNorm2d
+from arch.layer import CustomSequential, SimpleGate, Adapter, FreMLP, Branch
+from arch.attn import CAB
 
 
 class EBlock(nn.Module):
