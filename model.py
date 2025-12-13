@@ -278,7 +278,7 @@ class Model(nn.Module):
         return x
 
 
-def main():
+def create():
     img_channel = 3
     width = 32
 
@@ -314,4 +314,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    create()
