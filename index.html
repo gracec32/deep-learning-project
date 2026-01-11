@@ -1,0 +1,695 @@
+<html>
+<head>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+
+<link rel="shortcut icon" href="images/icon.ico">
+<style type="text/css">
+	body {
+		background-color: #e8fbf8;
+	}
+
+	/* Hide both math displays initially, will display based on JS detection */
+  .mathjax-mobile, .mathml-non-mobile { display: none; }
+
+  /* Show the MathML content by default on non-mobile devices */
+  .show-mathml .mathml-non-mobile { display: block; }
+  .show-mathjax .mathjax-mobile { display: block; }
+
+	.content-margin-container {
+		display: flex;
+		width: 100%; /* Ensure the container is full width */
+		justify-content: left; /* Horizontally centers the children in the container */
+		align-items: center;  /* Vertically centers the children in the container */
+	}
+	.main-content-block {
+		width: 100%; /* Change this percentage as needed */
+    	max-width: 1100px; /* Optional: Maximum width */
+		background-color: #fff;
+		border-left: 1px solid #DDD;
+		border-right: 1px solid #DDD;
+		padding: 8px 8px 8px 8px;
+		font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;#"Avenir";
+	}
+	.margin-left-block {
+			font-size: 14px;
+			width: 100%; /* Change this percentage as needed */
+			max-width: 200px; /* Optional: Maximum width */
+			position: relative;
+			margin-left: 10px;
+			text-align: left;
+			font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;#"Avenir";
+			padding: 5px;
+	}
+	.margin-right-block {
+			font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;#"Avenir";
+			font-size: 14px;
+			width: 25%; /* Change this percentage as needed */
+			max-width: 256px; /* Optional: Maximum width */
+			position: relative;
+			text-align: left;
+			padding: 10px;  /* Optional: Adds padding inside the caption */
+	}
+
+	img {
+			max-width: 100%; /* Make sure it fits inside the container */
+			height: auto;
+			display: block;
+			margin: auto;
+	}
+	.my-video {
+			max-width: 100%; /* Make sure it fits inside the container */
+			height: auto;
+			display: block;
+			margin: auto;
+	}
+	/* Hide both video displays initially, will display based on JS detection */
+  .vid-mobile, .vid-non-mobile { display: none; }
+
+  /* Show the video content by default on non-mobile devices */
+  .show-vid-mobile .vid-mobile { display: block; }
+  .show-vid-non-mobile .vid-non-mobile { display: block; }
+
+	a:link,a:visited
+	{
+		color: #0e7862; /*#1367a7;*/
+		text-decoration: none;
+	}
+	a:hover {
+		color: #24b597; /*#208799;*/
+	}
+
+	h1 {color: #0e7862; /*#1367a7;*/
+		font-size: 19px;
+		margin-top: 4px;
+		margin-bottom: 10px;
+	}
+
+	h3 {color: #24b597; /*#1367a7;*/
+		font-size: 16px;
+		margin-top: 4px;
+		margin-bottom: 10px;
+	}
+
+	p {color: gray;
+		font-size: 14px;
+		margin-top: 4px;
+		margin-bottom: 10px;
+		align-content: center;
+	}
+
+	table.header {
+    font-weight: 300;
+    font-size: 17px;
+    flex-grow: 1;
+		width: 70%;
+    max-width: calc(100% - 290px); /* Adjust according to the width of .paper-code-tab */
+	}
+	table td, table td * {
+	    vertical-align: middle;
+	    position: relative;
+	}
+	table.paper-code-tab {
+	    flex-shrink: 0;
+	    margin-left: 8px;
+	    margin-top: 8px;
+	    padding: 0px 0px 0px 8px;
+	    width: 290px;
+	    height: 150px;
+	}
+
+	.layered-paper { /* modified from: http://css-tricks.com/snippets/css/layered-paper/ */
+		box-shadow:
+		        0px 0px 1px 1px rgba(0,0,0,0.35), /* The top layer shadow */
+		        5px 5px 0 0px #fff, /* The second layer */
+		        5px 5px 1px 1px rgba(0,0,0,0.35), /* The second layer shadow */
+		        10px 10px 0 0px #fff, /* The third layer */
+		        10px 10px 1px 1px rgba(0,0,0,0.35); /* The third layer shadow */
+		margin-top: 5px;
+		margin-left: 10px;
+		margin-right: 30px;
+		margin-bottom: 5px;
+	}
+
+	hr {
+    height: 1px; /* Sets the height of the line to 1 pixel */
+    border: none; /* Removes the default border */
+    background-color: #DDD; /* Sets the line color to black */
+  }
+
+	div.hypothesis {
+		width: 80%;
+		background-color: #EEE;
+		border: 1px solid black;
+		border-radius: 10px;
+		-moz-border-radius: 10px;
+		-webkit-border-radius: 10px;
+		font-family: Courier;
+		font-size: 18px;
+		text-align: center;
+		margin: auto;
+		padding: 16px 16px 16px 16px;
+	}
+
+	div.citation {
+    font-size: 0.8em;
+    background-color:#fff;
+    padding: 10px;
+		height: 200px;
+  }
+
+	.fade-in-inline {
+		position: absolute;
+		text-align: center;
+		margin: auto;
+		-webkit-mask-image: linear-gradient(to right,
+																			transparent 0%,
+																			transparent 40%,
+																			black 50%,
+																			black 90%,
+																			transparent 100%);
+		mask-image: linear-gradient(to right,
+																transparent 0%,
+																transparent 40%,
+																black 50%,
+																black 90%,
+																transparent 100%);
+		-webkit-mask-size: 8000% 100%;
+		mask-size: 8000% 100%;
+		animation-name: sweepMask;
+		animation-duration: 4s;
+		animation-iteration-count: infinite;
+		animation-timing-function: linear;
+		animation-delay: -1s;
+	}
+
+	.fade-in2-inline {
+			animation-delay: 1s;
+	}
+
+	.inline-div {
+			position: relative;
+	    display: inline-block; /* Makes both the div and paragraph inline-block elements */
+	    vertical-align: top; /* Aligns them at the top, you can adjust this to middle, bottom, etc., based on your needs */
+	    width: 50px; /* Optional: Adds space between the div and the paragraph */
+	}
+
+</style>
+
+	  <title>Low-Light in Different Colors</title>
+      <meta property="og:title" content="Low-Light in Different Colors" />
+			<meta charset="UTF-8">
+  </head>
+
+  <body>
+
+		<div class="content-margin-container">
+				<div class="margin-left-block">
+				</div>
+		    <div class="main-content-block">
+						<table class="header" align=left>
+								<tr>
+									<td colspan=4>
+										<span style="font-size: 30px; font-family: 'Courier New', Courier, monospace; /* Adds fallbacks */">
+											Low-Light Image Enhancement in Different Color Spaces
+										</span>
+									</td>
+								</tr>
+								<tr>
+										<td align=left>
+												<span style="font-size:17px; color: #0e7862;">Grace Choi</a></span>
+										</td>
+								<tr>
+									<td colspan=4 align=left><span style="font-size:18px">Final project for 6.7960, MIT</span></td>
+								</tr>
+						</table>
+					</div>
+					<div class="margin-right-block">
+					</div>
+		</div>
+
+		<div class="content-margin-container" id="intro">
+				<div class="margin-left-block">
+          <!-- table of contents here -->
+          <div style="position:fixed; max-width:inherit; top:max(20%,120px)">
+              <b style="font-size:16px">Outline</b><br><br>
+              <a href="#intro">Introduction</a><br><br>
+              <a href="#color_space_llie">Color Spaces & LLIE</a><br><br>
+              <a href="#model_arch">Model Architecture</a><br><br>
+			  <a href="#experiment"> Experimental Set-Up</a><br><br>
+			  <a href="#results"> Experimental Results</a><br><br>
+			  <a href="#discussion"> Discussion</a><br><br>
+			  <a href="#conclusion"> Conclusion</a><br><br>
+			  <a href="#references"> References</a><br><br>
+          </div>
+				</div>
+		    <div class="main-content-block">
+            <!--You can embed an image like this:-->
+            <img src="./images/llie-ex.png" width=900px/>
+		    </div>
+		    <div class="margin-right-block">
+		    </div>
+		</div>
+
+    <div class="content-margin-container" id="intro">
+				<div class="margin-left-block">
+				</div>
+		    <div class="main-content-block">
+						<h1>Introduction </h1>
+
+						Modern cameras are quite robust at capturing images during the daytime
+						and are ubiquitous in everyday life like smartphones, computers, and tablets.
+						However, in low-light conditions like during the night or in range of
+						a shadow, camera sensors can only capture weak signals with severe noise
+						creating low quality images with many artifacts.
+						But, these poor visual quality images can be enhanced to a higher quality using
+						Low-Light Image Enhancement (LLIE) techniques, which brighten the original
+						image with deep neural networks while reducing any distortions
+						[<a href="#ref_1">1</a>, <a href="#ref_2">2</a>].
+
+						<br/>
+						<br/>
+
+						Low-light image enhancement has practical applications in a variety of
+						fields like object detection for autonomous vehicles traveling on roads
+						when the it's dark outside or ship safety
+						during maritime operations [<a href="#ref_1">1</a>]. Additionally,
+						mobile devices are more heavily affected by low-light image distortions
+						when using long exposure for nighttime photography because of the
+						creation of ghosting and blurring effects, which further
+						demonstrates the need for LLIE techniques [<a href="#ref_3">3</a>].
+						Conventional LLIE methods have significantly improved over time, but
+						most models work to map images in the RGB
+						color space. We aim to explore LLIE in a different color spaces
+						with this project to determine whether different color representations
+						can produce more enhanced images.
+
+		    </div>
+		    <div class="margin-right-block">
+		    </div>
+		</div>
+
+		<div class="content-margin-container" id="color_space_llie">
+				<div class="margin-left-block">
+				</div>
+		    <div class="main-content-block">
+					<h1>Color Spaces & LLIE </h1>
+
+					<h3> Traditional LLIE Methods vs. Deep Learning </h3>
+
+				  	Traditional LLIE methods utilized statistical methods such as histogram modifications
+					of image pixel values and Gamma Correction [<a href="#ref_2">2</a>].
+					A lot of early methods were based on Retinex decomposition which is related to
+					image illummination [<a href="#ref_1">1</a>]. Then, deep learning-based approaches
+					were introduced which combined the ideas of reflectance and illumination from Retinex
+					theory with new discoveries in transformers which better
+					addressed spatial information. These transformer diffusion models corrected noise
+					and color biases better.
+
+					<br/>
+					<br/>
+
+					<h3> Image Color Spaces </h3>
+					The standard for images is the RGB color space where images are represented in
+					channels of red, green, and blue. However, due to the interconnected nature of
+					color and brightness in RGB which can easily be disrupted, RGB is not the optimal
+					color space for LLIE [<a href="#ref_2">2</a>].
+					Instead, the color space of HSV offers a different representation for images.
+					HSV utilizes hue, saturation, and value. While HSV has the issue of discontinuity
+					on its hue axis, <em> Yan et al. </em> solved this issue by remapping images into
+					the HVI color space (Horizontal/Vertical-Intensity) where HVI directly one-to-one
+					maps to RGB in terms of color and reflectance [<a href="#ref_2">2</a>].
+
+					<img src="./images/hvi-color-space.png" width=512px/>
+					<p>Figure from <em> Yan et al. </em> describing how the implementation of the
+				HVI color space addresses the discontinuity of HSV [<a href="#ref_2">2</a>]</p>
+
+					<br/>
+					<br/>
+
+					<h3> Applying HSV to LLIE </h3>
+
+					We aim to further investigate the idea of training models in other
+					color spaces by applying the HVI color space transformation on another
+					state-of-the-art low-light image enhancement model.
+					We chose to work with the model proposed by <em> Feijoo et al. </em>
+					(CVPR '25) called DarkIR. DarkIR reduces blur distortion and illuminates low-light images
+					for further enhancement by combining low-resolution low-light enhancement encoder blocks
+					with upsampling-focused deblurring decoder blocks [<a href="#ref_3">3</a>]. By combining both
+					deblurring and different color transformations, we aim to achieve a model with
+					powerful low-light enhancement.
+
+		    </div>
+		    <div class="margin-right-block" style="transform: translate(0%, 90%);"> <!-- you can move the margin notes up and down with translate -->
+		    </div>
+		</div>
+
+		<div class="content-margin-container" id="model_arch">
+				<div class="margin-left-block">
+				</div>
+		    <div class="main-content-block">
+            <h1>Model Architecture</h1>
+
+				The DarkIR model was adopted to serve as the backbone for the new model with
+				the HVI color transformation then applied in between layers. The model was broken down
+				into several encoder and decoder blocks that serve different purposes.
+				The encoders focused on illumination feature extraction while the decoders targeted
+				deblurring features. As outlined in the original DarkIR paper, a series of encoders
+				were chained together (1, 2, 3, 2) for 8 encoder blocks [<a href="#ref_3">3</a>];
+				then, the encoders were followed by (2, 3, 1, 1) a total of 7 decoder blocks.
+				Between the groupings of either encoder or decoder blocks, downsampling was conducted.
+
+				<br/>
+				<br/>
+
+				<img src="./images/darkir-orig.png" width=900px/>
+				<p>Figure from <em> Feijoo et al. </em> describing the original DarkIR
+				model architecture with encoder and decoder blocks [<a href="#ref_3">3</a>]</p>
+
+				<br/>
+				<br/>
+
+				<h3> Encoder Blocks </h3>
+				The encoder blocks of the model follow the structure of an attention
+				module followed by a feed-forward network in the frequency domain. The feed
+				forward network was preserved from DarkIR to keep the Fast Fourier Transform
+			 	which processes the light conditions of images based on the amplitude of their
+				frequency domains to extract spatial features [<a href="#ref_3">3</a>].
+
+				<br/>
+				<br/>
+
+				Instead, we modified the attention module preceding the feed-forward network
+				to incorporate the HVI color transformations. The original DarkIR attention
+				module consisted of layer normalization, followed by 3x3 and 1x1 convolutions, then
+				a simple gating mechanism, and finally ended with simplified channel attention
+				[<a href="#ref_3">3</a>]. The gating mechanism was a key part of the
+				spatial information extraction, so to preserve this extraction, we didn't remove
+				any elements of the original DarkIR. Instead, we introduced the HVI color
+				transformation and an additional cross attention mechanism.
+
+				<br/>
+				<br/>
+
+				<img src="./images/my-model.png" width=500px/>
+				<p> Figure describes our model architecture with color transformations
+					and cross attention mechanism added to the block
+				</p>
+
+				<br/>
+				<br/>
+
+				The HVI color transformation occurs before the layer normalization. The
+				color transformed input is set aside to be used for the cross attention later
+				in the module. The 3x3 and 1x1 convolution layers proceed as normal with the original input.
+				Then, after the simple gate and the simplified channel attention, the color
+				transformed input and the current hidden states undergo cross attention.
+				The cross attention in <em> Yan et al. </em> is called Ligthen Cross Attention
+				which creates a seperate intensity (I) mapping branch from the hue, value (HV) color mapping
+				of the original image [<a href="#ref_2">2</a>]. However, we didn't seperate the images
+				into intensity and color mappings. Instead, we modified the Cross Attention Block
+				to fit our inputs, which were the current hidden states and the set-aside color transformed
+				input from previous steps.
+
+				<br/>
+				<br/>
+
+				<img src="./images/hvi-cab.png" width=450px/>
+				<p> Figure from <em> Yan et al. </em> describing the original Lighten Cross
+					Attention implementation which we then modfied to suit our own
+					model inputs [<a href="#ref_2">2</a>]</p>
+
+				<br/>
+				<br/>
+
+				Beyond this input modification, the actual computation of the cross attention block itself was
+				preserved where first the query (Q) was dervied. Then, the key and value were split. These
+				two operations resulted in feature embedding convolution layers. After that, a single head
+				of attention was applied, which ended the cross attention block. The output of the cross
+				attention continues with the original DarkIR architecture by undergoing a final layer of 1x1
+				convolution as well as element-wise addition before entering the feed-foward network.
+
+				<br/>
+				<br/>
+
+				<h3> Decoder Blocks </h3>
+				Given the decoder blocks' similarity in structure to the encoder blocks, a similar set of
+				modifications was performed where the HVI color transformation was introduced followed by
+				cross attention before the feed-forward network.
+				Like the encoder, we stored a HVI color transformed version of the input before running the
+				original input through layer normalization followed by layers of convolution. These three
+				depth-wise convolutions were important to enhance features for deblurring [<a href="#ref_3">3</a>].
+				Following the simple gate and simplified channel attention, we applied cross attention on the current states
+				and the set-aside color transformed input tensor values. After cross attention, the final
+				convolution layer and gated-feed forward network proceeded instead of activations.
+
+				<br/>
+				<br/>
+
+		    </div>
+		    <div class="margin-right-block" style="transform: translate(0%, 50%);"> <!-- you can move the margin notes up and down with translate -->
+		    </div>
+		</div>
+
+		<div class="content-margin-container" id="experiment">
+				<div class="margin-left-block">
+				</div>
+		    <div class="main-content-block">
+						<h1>Experimental Set-Up</h1>
+
+						<h3> Loss Function </h3>
+
+						Determining the loss functions was quite difficult. The original DarkIR provided a few different
+						loss functions, but when running the training for the model with the given set of loss functions, we
+						repeatedly ran in to GPU memory issues. The original DarkIR loss function requires downsampling
+						with a pretrained VGG19 model to act as architecture guiding loss [<a href="#ref_3">3</a>],
+						yet loading in the pretrained model while simultaneouly running training epochs reached the
+						limit of our availabe compute resources.
+
+						<br/>
+						<br/>
+
+						Instead, we addressed the limitations of our computational resources by going with a less intensive
+						loss function. Simply, using <em> L1 </em> loss (pixel loss) proved to be powerful when applied in conjungtion
+						with the gradient edge loss developed in <em> Feijoo et al. </em> which specifically targets
+						reconstruction of edges for deblurring. Standard weights of 1 and 50 were applied to each respectively.
+						Also, within the original DarkIR paper itself, the different combinations of loss functions performed
+						relatively at the same level, so we felt confident with proceeding with our modified version of the loss function.
+
+						<br/>
+						<br/>
+
+						<img src="./images/ledge-loss.png" width=300px/>
+						<p>Equation from edge loss calculation which we then combined with L1 [<a href="#ref_3">3</a>]
+						</p>
+
+						<br/>
+						<br/>
+
+						<h3> Dataset </h3>
+
+						The dataset we chose to train on was <em> LOLv2 </em>. LOLv2 [<a href="#ref_4">4</a>]
+						is a dataset of low resolution images each paired with a high quality ground truth image for
+						training. The dataset includes 689 pairs of real world images for testing in addition with 100
+						pairs for validation. We choose to use the LOLv2-Real set of images to model real world applications
+						compared to synthetic data.
+
+						<br/>
+						<br/>
+
+						<img src="./images/data-ex.png" width=700px/>
+						<p> Figure demonstrates an example low-light ground-truth image pairing from the LOLv2 dataset [<a href="#ref_4">4</a>]</p>
+
+						<br/>
+						<br/>
+
+						<h3> Training Parameters </h3>
+
+						Our model was implemented in PyTorch. For our optimizer, we adopted AdamW [<a href="#ref_5">5</a>] with betas set at
+						0.9 and 0.9. The weight decay was set to 0.001 while the learning rate was initialized at 0.0005
+						to intentionally set similar conditions to <em> Feijoo et al. </em> [<a href="#ref_3">3</a>].
+						Cosine annealing was also selected with a minimum of 0.000001.
+
+						<br/>
+						<br/>
+
+						Initially, the batch size was set to 32, but due to a lack of computational power, we
+						eventually reduced the batch size to 16. The training was done on an A100 GPU through
+						Google Colaboratory. The LOLv2 dataset was appropriately separated into a train/test split.
+						Additionally, image resize transformations were performed to ensure image sizes of 384 x 384.
+						After setting these conditions, models were trained for 100 epochs each.
+		    </div>
+		    <div class="margin-right-block">
+		    </div>
+		</div>
+
+		<div class="content-margin-container" id="results">
+				<div class="margin-left-block">
+				</div>
+		    <div class="main-content-block">
+						<h1>Experimental Results</h1>
+
+						Results from training point to HVI color transformations creating a positive
+						increase in low-light image enhancement. Two models were trained. One model with
+						the HVI color transformation architecture including the cross attention
+						mechanism, and another model without any modifications. Throughout training, model
+						training and validation loss values were collected in a plot. Additionally, the
+						peak-signal-to-noise ratio (PSNR) metric was captured at each epoch.
+
+						<br/>
+						<br/>
+
+						High PSNR values indicate better image enhancement from poor quality
+						to a better reconstructed image. At the end of 100 epochs, the original model
+						had a valdiation set PSNR of <em> 19.54 </em> while the color transformed model
+						had a PSNR of <em> 20.33 </em>, which demonstrates a slight increase in image
+						quality with the modified model architecture. Overall, during training, the
+						two models had comparable losses while the HVI color transformed model
+						performed better on signal-to-noise ratio.
+
+						<br/>
+						<br/>
+
+						<img src="./images/train-loop.png" width=900px/>
+						<p>Our results from model training and validation comparing a color transformed model
+							and base DarkIR model without any modifications
+						</p>
+
+						<br/>
+						<br/>
+
+						In addition to comparing PSNR values during training, after training was fully
+						completed, we took the models and performed inference with them. We took 2
+						random images from the test split of the dataset. Then, we loaded in our
+						trained models and ran enhancement on the low-light versions.
+
+						<br/>
+						<br/>
+
+						The outputs from both models had some amounts of noise, especially the
+						color transformed model had some sort of grid-like pattern superimposed on
+						the model output images. Also, from a qualitative standpoint, the color
+						transformed model seemed to match closer to the ground truth images in terms of
+						final output image though the model overall had a bit of a
+						green-ish blue tinge to its outputs. On the other hand, the original model seemed to have less
+						blurry images with a fair resemblance to the ground truth images.
+
+						<br/>
+						<br/>
+
+						<img src="./images/llie-ex.png" width=1200px/>
+						<p>Results from running inferences with our models compared to the input and image ground truth</p>
+		    </div>
+		    <div class="margin-right-block">
+		    </div>
+		</div>
+
+		<div class="content-margin-container" id="discussion">
+				<div class="margin-left-block">
+				</div>
+		    <div class="main-content-block">
+						<h1>Discussion</h1>
+
+						<h3> Implications </h3>
+
+						In general, the results point to a slight positive implication towards
+						favoring future exploration of other color representations besides RGB.
+						The PSNR values for the color transformed model performed better than the
+						original, but when infernce was actually run, the original enhanced images
+						slightly more clearly.
+						The results also help validate some of the findings in <em> Yan et al. </em>
+						were cross attention coupled by color transformations resulted in more
+						effective models.
+
+						<br/>
+						<br/>
+
+						Another statistic of note was the model size and performance.
+						Both models were around <em>4.19 M</em> parameters. The color transformed
+						model was a bit larger at <em>10.43 GMac</em>. In contrast, the original
+						model was around <em>7.73 GMac</em> which lines up with the values
+						reported in DarkIR's paper [<a href="#ref_3">3</a>]. The introduction of color
+						transformation and cross atttention didn't terribly increase the base model size.
+
+						<br/>
+						<br/>
+
+						<h3> Limitations </h3>
+
+						While the PSNR values of either model couldn't reach what was orignally reported
+						in the papers, we believe this discrepancy can be attributed to a lack of
+						computational resources. We fully exhuasted our Colab Pro resources to run
+						100 epochs, but we wish we could have run them longer.
+						Additionally, we were unable to use certain loss functions as training criterion
+						due to requiring a pretrained VGG19 model loaded in to run which quickly
+						exceed our GPU capacity.
+
+						<br/>
+						<br/>
+
+						<h3> Future Work </h3>
+
+						In the future, we would love to explore further modifications to our
+						color transformed model. In addition to HSV/HVI color spaces, we are curious
+						to consider other color representations beyond RGB. Additionally, we would be
+						interested in applying different low-light image datasets as well. Another
+						potential area to investigate would be more ablation studies to better understand
+						the models and applying different metrics such as structural similarity (SSIM)
+						instead of PSNR to track image restoration from distorted forms. Furthermore,
+						different architectures of color transformation could be implemented for future
+						experiments. Instead of setting aside a color transformed input to later be used
+						for cross attention, a color-intensity map separation closer to as described
+						in <em> Yan et al. </em> could be worth exaiming.
+
+		    </div>
+		    <div class="margin-right-block">
+		    </div>
+		</div>
+
+		<div class="content-margin-container" id="conclusion">
+				<div class="margin-left-block">
+				</div>
+		    <div class="main-content-block">
+						<h1>Conclusion </h1>
+
+						Ultimately, the experiment didn't fully validate the hypothesis due to differences
+						during inference. However, in terms of model metric performance with PSNR, the color
+						transformed model performed better as expected, continuing to expand on the idea that
+						RGB color representations may not be the most effective for low-light image
+						enhancement tasks. The models performed not incredibly off from state-of-the-art
+						benchmarks on the LOLv2 dataset. Further research into color representations
+						seems quite promising.
+
+		    </div>
+		    <div class="margin-right-block">
+		    </div>
+		</div>
+
+		<div class="content-margin-container" id="citations">
+				<div class="margin-left-block">
+				</div>
+		    <div class="main-content-block">
+
+				<h1> References </h1>
+
+						<div class='citation' id="references" style="height:auto"><br>
+
+							<a id="ref_1"></a>[1] <a href="https://ieeexplore.ieee.org/document/9852460">Low-Light Image Enhancement:
+								A Comparative Review and Prospects</a>, Kim 2022<br><br>
+							<a id="ref_2"></a>[2] <a href="https://arxiv.org/pdf/2402.05809"> You Only Need One Color Space: An Efficient
+																		Network for Low-light Image Enhancement</a>, Yan et al. 2024<br><br>
+							<a id="ref_3"></a>[3] <a href="https://arxiv.org/pdf/2412.13443">DarkIR: Robust Low-Light Image Restoration</a>, Feijoo et al. 2025<br><br>
+							<a id="ref_4"></a>[4] <a href="https://pubmed.ncbi.nlm.nih.gov/33460379/">Sparse Gradient Regularized Deep
+								Retinex Network for Robust Low-Light Image Enhancement</a>, Yang et al. 2021<br><br>
+							<a id="ref_5"></a>[5] <a href="https://arxiv.org/abs/1711.05101">Decoupled Weight Decay Regularization</a> Loshchilov & Hutter 2019<br><br>
+
+						</div>
+		    </div>
+		    <div class="margin-right-block">
+            <!-- margin notes for reference block here -->
+		    </div>
+		</div>
+
+	</body>
+
+</html>
